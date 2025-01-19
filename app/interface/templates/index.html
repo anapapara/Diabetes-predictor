@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
+<head>
+  <meta charset="UTF-8">
+  <title>Diabetes Predictor</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <script>
+    // Function to clear the prediction message
+    function clearMessage() {
+      const predictionElement = document.getElementById('prediction-message');
+      predictionElement.innerHTML = '';
+      const formElement = document.getElementById('prediction-form');
+      formElement.reset();
+      window.location.href = "/";
+
+    }
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>Diabetes Predictor</h1>
+  </header>
+
+  <div class="container">
+    <div class="intro">
+      <section>
+        <p>Welcome! This application helps you determine the likelihood of having diabetes based
+          on basic information about yourself.<br><br>
+          To find if you are susceptible of having diabetes, fill in the required fields below with accurate details
+          about your weight,
+          height, average sleep hours and other lifestyle factors. Once you have completed the form, click
+          <strong>Predict</strong> to get your result.
+        </p>
+      </section>
+    </div>
+    <div class="form">
+
+      <form id="prediction-form" action="{{ url_for('predict') }}" method="post">
+        <div>
+          <label for="weight">Weight</label>
+          <input type="text" id="weight" name="Weight" placeholder="Weight" required="required" />
+        </div>
+
+        <div>
+          <label for="height">Height</label>
+          <input type="text" id="height" name="Height" placeholder="Height" required="required" />
+        </div>
+
+        <div>
+          <label for="sleep">Sleep Time</label>
+          <input type="text" id="sleep" name="Sleep Time" placeholder="Sleep Time in hours (0-24)"
+            required="required" />
+        </div>
+
+        <div>
+          <label for="depressive">Depression</label>
+          <select id="depressive" name="Depressive" placeholder="Any depressive disorder" required="required">
+            <option value="" disabled selected>Select an option</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="dn">Don't know/Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="walk">Walk difficulty</label>
+          <select id="walk" name="Walk" placeholder="Any walk difficulty" required="required">
+            <option value="" disabled selected>Select an option</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="dn">Don't know/Not sure</option>
+          </select>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+      </form>
+    </div>
+
+    <div>
+      {% if prediction_text %}
+      <p id="prediction-message"><strong>{{ prediction_text }}</strong></p>
+      {% endif %}
+      {% if error_message %}
+      <p id="prediction-message" style="color: red; font-weight: bold;">{{ error_message }}</p>
+      {% endif %}
+      <button type="button" onclick="clearMessage()" class="btn btn-secondary btn-large">Try again</button>
+
+    </div>
+  </div>
+
+
+</body>
+
+</html>
